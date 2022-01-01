@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/spf13/viper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
@@ -20,6 +21,12 @@ func queryCmd() *cobra.Command {
 		queryBalanceCmd(),
 		queryAccountCmd(),
 	)
+
+	// --chain flag
+	cmd.PersistentFlags().StringP("chain", "c", "cosmoshub", "override the default chain")
+	if err := viper.BindPFlag("chain", cmd.PersistentFlags().Lookup("chain")); err != nil {
+		panic(err)
+	}
 
 	return cmd
 }

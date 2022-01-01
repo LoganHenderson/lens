@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/spf13/viper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -19,6 +20,12 @@ func txCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(bankSendCmd())
+
+	// --chain flag
+	cmd.PersistentFlags().StringP("chain", "c", "cosmoshub", "override the default chain")
+	if err := viper.BindPFlag("chain", cmd.PersistentFlags().Lookup("chain")); err != nil {
+		panic(err)
+	}
 
 	return cmd
 }
