@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 
@@ -68,6 +69,16 @@ type Config struct {
 }
 
 func (c *Config) GetDefaultClient() *client.ChainClient {
+	chain := viper.GetString("chain")
+	if chain != "" && chain != c.DefaultChain {
+		for chainIter, _ := range c.cl {
+			if chainIter == chain {
+				return c.GetClient(chain)
+			}
+		}
+		// Would be nice to return an error here
+		log.Fatalf("unkown chain %s", chain)
+	}
 	return c.GetClient(c.DefaultChain)
 }
 

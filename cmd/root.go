@@ -61,6 +61,12 @@ func NewRootCmd() *cobra.Command {
 		panic(err)
 	}
 
+	// --chain flag
+	rootCmd.PersistentFlags().StringP("chain", "c", "cosmoshub", "override the default chain")
+	if err := viper.BindPFlag("chain", rootCmd.PersistentFlags().Lookup("chain")); err != nil {
+		panic(err)
+	}
+
 	rootCmd.AddCommand(
 		chainsCmd(),
 		keysCmd(),
